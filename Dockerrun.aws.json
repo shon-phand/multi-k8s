@@ -3,7 +3,7 @@
     "containerDefinitions": [
         {
             "name": "client",
-            "image": "shonphand/multi-cleint",
+            "image": "shonphand/multi-client",
             "hostname": "client",
             "essential": false,
             "memory": 128
