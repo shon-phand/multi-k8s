@@ -1,18 +1,18 @@
---- 
-before_install: 
-  - "openssl aes-256-cbc -K $encrypted_f1fe3a970a98_key -iv $encrypted_f1fe3a970a98_iv -in service-account.json.enc -out service-account.json -d"
-  - "curl https://sdk.cloud.google.com | bash > /dev/null;"
-  - "source $HOME/google-cloud-sdk/path.bash.inc"
-  - "gcloud components update kubectl"
-  - "gcloud auth activate-service-account --key-file service-account.json"
-  - "gcloud config set project multi-k8s-256205"
-  - "gcloud config set compute/zone asia-east1-a"
-  - "gcloud container clusters get-credentials multi-cluster"
-  - "echo \"$DOCKER_PASSWORD\" | docker login -u \"$DOCKER_USERNAME\" --password-stdin"
-  - "docker build -t shonphand/react-test -f ./client/Dockerfile.dev ./client"
 language: generic
-script: 
-  - "docker run -e CI=true shonphand/react-test npm run test"
-services: 
-  - docker
 sudo: required
+services:
+  - docker
+before_install:
+  - openssl aes-256-cbc -K $encrypted_f1fe3a970a98_key -iv $encrypted_f1fe3a970a98_iv -in service-account.json.enc -out service-account.json -d
+  - curl https://sdk.cloud.google.com | bash > /dev/null;
+  - source $HOME/google-cloud-sdk/path.bash.inc 
+  - gcloud components update kubectl
+  - gcloud auth activate-service-account --key-file service-account.json
+  - gcloud config set project multi-k8s-256205 
+  - gcloud config set compute/zone asia-east1-a
+  - gcloud container clusters get-credentials multi-cluster
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t shonphand/react-test -f ./client/Dockerfile.dev ./client
+
+script: 
+  - docker run -e CI=true shonphand/react-test npm run test
